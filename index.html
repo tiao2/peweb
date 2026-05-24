@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Verilog Simulator</title>
-    <script src="simulator.js"></script>
     <style>
         textarea { width: 100%; height: 300px; font-family: monospace; }
         button { margin-top: 10px; }
@@ -22,18 +21,22 @@ endmodule
     <h4>Output:</h4>
     <pre id="output"></pre>
     <script>
-        let simulateFunc = null;
-        Module.onRuntimeInitialized = () => {
-            simulateFunc = Module.cwrap('simulate_verilog', 'string', ['string']);
-        };
-        function run() {
-            const code = document.getElementById('code').value;
-            if (simulateFunc) {
-                const result = simulateFunc(code);
-                document.getElementById('output').innerText = result;
-            } else {
-                document.getElementById('output').innerText = 'WASM not ready yet.';
+        // 定义 Module 对象，设置回调
+        var Module = {
+            onRuntimeInitialized: function() {
+                console.log("WASM ready");
+                document.getElementById('output').innerText = "WASM ready. You can now run simulation.";
             }
+        };
+    </script>
+    <script src="phy_engine.js"></script>
+    <script>
+        function run() {
+            var code = document.getElementById('code').value;
+            // 这里需要调用您导出的仿真函数，例如 _simulate_verilog 或使用 cwrap
+            // 但官方 phy_engine.js 导出的函数是 _create_circuit 等，需要适配
+            // 临时输出提示
+            document.getElementById('output').innerText = "Simulation not implemented yet. WASM loaded but no simulation function.\nCode:\n" + code;
         }
     </script>
 </body>
